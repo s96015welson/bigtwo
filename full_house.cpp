@@ -4,18 +4,16 @@
 #include <QPixmap>
 #include "Parameter.h"
 #include "Combination.h"
-#include "four_of_a_kind.h"
+#include "full_house.h"
 #include "Game.h"
 
-// extern Game *game;
-
-four_of_a_kind::four_of_a_kind(Player *now_player) : Combination()
+full_house::full_house(Player *now_player) : Combination()
 {
     player = now_player;
     find_all_this_combination();
 }
 
-void four_of_a_kind::find_all_this_combination()
+void full_house::find_all_this_combination()
 {
     player->cardNumberCal();
     if (player->ownCards.size() == 0)
@@ -26,11 +24,11 @@ void four_of_a_kind::find_all_this_combination()
     return;
 }
 
-void four_of_a_kind::findCombinations(std::vector<Card *> hand, std::vector<Card *> currentCombination, int index, int count)
+void full_house::findCombinations(std::vector<Card *> hand, std::vector<Card *> currentCombination, int index, int count)
 {
     if (currentCombination.size() == 5)
     {
-        // 若是four_of_a_kind，存到combinations
+        // 若是full_house，存到combinations
         if (is_this_combination(currentCombination))
             combinations.push_back(currentCombination);
 
@@ -45,11 +43,12 @@ void four_of_a_kind::findCombinations(std::vector<Card *> hand, std::vector<Card
     }
 }
 
-bool four_of_a_kind::is_this_combination(std::vector<Card *> nowC)
+bool full_house::is_this_combination(std::vector<Card *> nowC)
 {
-    if (nowC[0]->num == nowC[1]->num && nowC[1]->num == nowC[2]->num && nowC[2]->num == nowC[3]->num)
+    if (nowC[0]->num == nowC[1]->num && nowC[2]->num == nowC[3]->num && nowC[3]->num == nowC[4]->num)
         return true;
-    else if (nowC[1]->num == nowC[2]->num && nowC[2]->num == nowC[3]->num && nowC[3]->num == nowC[4]->num)
+    else if (nowC[0]->num == nowC[1]->num && nowC[1]->num == nowC[2]->num && nowC[3]->num == nowC[4]->num)
         return true;
+
     return false;
 }

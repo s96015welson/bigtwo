@@ -53,24 +53,40 @@ OBJECTS_DIR   = ./
 SOURCES       = Card.cpp \
 		Combination.cpp \
 		four_of_a_kind.cpp \
+		full_house.cpp \
 		Game.cpp \
 		main.cpp \
-		Player.cpp moc_Card.cpp \
+		pair2.cpp \
+		Player.cpp \
+		straight.cpp \
+		straight_flush.cpp moc_Card.cpp \
 		moc_Combination.cpp \
 		moc_four_of_a_kind.cpp \
+		moc_full_house.cpp \
 		moc_Game.cpp \
-		moc_Player.cpp
+		moc_pair2.cpp \
+		moc_Player.cpp \
+		moc_straight.cpp \
+		moc_straight_flush.cpp
 OBJECTS       = Card.o \
 		Combination.o \
 		four_of_a_kind.o \
+		full_house.o \
 		Game.o \
 		main.o \
+		pair2.o \
 		Player.o \
+		straight.o \
+		straight_flush.o \
 		moc_Card.o \
 		moc_Combination.o \
 		moc_four_of_a_kind.o \
+		moc_full_house.o \
 		moc_Game.o \
-		moc_Player.o
+		moc_pair2.o \
+		moc_Player.o \
+		moc_straight.o \
+		moc_straight_flush.o
 DIST          = /usr/lib/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt5/mkspecs/common/unix.conf \
 		/usr/lib/qt5/mkspecs/common/sanitize.conf \
@@ -156,14 +172,22 @@ DIST          = /usr/lib/qt5/mkspecs/features/spec_pre.prf \
 		bigtwo.pro Card.h \
 		Combination.h \
 		four_of_a_kind.h \
+		full_house.h \
 		Game.h \
+		pair2.h \
 		Parameter.h \
-		Player.h Card.cpp \
+		Player.h \
+		straight.h \
+		straight_flush.h Card.cpp \
 		Combination.cpp \
 		four_of_a_kind.cpp \
+		full_house.cpp \
 		Game.cpp \
 		main.cpp \
-		Player.cpp
+		pair2.cpp \
+		Player.cpp \
+		straight.cpp \
+		straight_flush.cpp
 QMAKE_TARGET  = bigtwo
 DESTDIR       = 
 TARGET        = bigtwo.exe
@@ -357,8 +381,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Card.h Combination.h four_of_a_kind.h Game.h Parameter.h Player.h $(DISTDIR)/
-	$(COPY_FILE) --parents Card.cpp Combination.cpp four_of_a_kind.cpp Game.cpp main.cpp Player.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Card.h Combination.h four_of_a_kind.h full_house.h Game.h pair2.h Parameter.h Player.h straight.h straight_flush.h $(DISTDIR)/
+	$(COPY_FILE) --parents Card.cpp Combination.cpp four_of_a_kind.cpp full_house.cpp Game.cpp main.cpp pair2.cpp Player.cpp straight.cpp straight_flush.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -390,9 +414,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/qt5/mkspecs/features/data/dummy.cpp
 	g++ -fno-keep-inline-dllexport -D_GNU_SOURCE -pipe -O2 -Wall -W -dM -E -o moc_predefs.h /usr/lib/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_Card.cpp moc_Combination.cpp moc_four_of_a_kind.cpp moc_Game.cpp moc_Player.cpp
+compiler_moc_header_make_all: moc_Card.cpp moc_Combination.cpp moc_four_of_a_kind.cpp moc_full_house.cpp moc_Game.cpp moc_pair2.cpp moc_Player.cpp moc_straight.cpp moc_straight_flush.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_Card.cpp moc_Combination.cpp moc_four_of_a_kind.cpp moc_Game.cpp moc_Player.cpp
+	-$(DEL_FILE) moc_Card.cpp moc_Combination.cpp moc_four_of_a_kind.cpp moc_full_house.cpp moc_Game.cpp moc_pair2.cpp moc_Player.cpp moc_straight.cpp moc_straight_flush.cpp
 moc_Card.cpp: Parameter.h \
 		Card.h \
 		moc_predefs.h \
@@ -401,7 +425,6 @@ moc_Card.cpp: Parameter.h \
 
 moc_Combination.cpp: Parameter.h \
 		Player.h \
-		Combination.h \
 		Card.h \
 		Combination.h \
 		moc_predefs.h \
@@ -412,10 +435,21 @@ moc_four_of_a_kind.cpp: Parameter.h \
 		Combination.h \
 		Player.h \
 		Card.h \
+		Game.h \
 		four_of_a_kind.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api four_of_a_kind.h -o moc_four_of_a_kind.cpp
+
+moc_full_house.cpp: Parameter.h \
+		Combination.h \
+		Player.h \
+		Card.h \
+		Game.h \
+		full_house.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api full_house.h -o moc_full_house.cpp
 
 moc_Game.cpp: Parameter.h \
 		Card.h \
@@ -426,14 +460,42 @@ moc_Game.cpp: Parameter.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api Game.h -o moc_Game.cpp
 
-moc_Player.cpp: Parameter.h \
+moc_pair2.cpp: Parameter.h \
 		Combination.h \
 		Player.h \
+		Card.h \
+		Game.h \
+		pair2.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api pair2.h -o moc_pair2.cpp
+
+moc_Player.cpp: Parameter.h \
 		Card.h \
 		Player.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api Player.h -o moc_Player.cpp
+
+moc_straight.cpp: Parameter.h \
+		Combination.h \
+		Player.h \
+		Card.h \
+		Game.h \
+		straight.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api straight.h -o moc_straight.cpp
+
+moc_straight_flush.cpp: Parameter.h \
+		Combination.h \
+		Player.h \
+		Card.h \
+		Game.h \
+		straight_flush.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api straight_flush.h -o moc_straight_flush.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -462,14 +524,29 @@ Combination.o: Combination.cpp Parameter.h \
 four_of_a_kind.o: four_of_a_kind.cpp Parameter.h \
 		Combination.h \
 		Player.h \
-		Card.h
+		Card.h \
+		four_of_a_kind.h \
+		Game.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o four_of_a_kind.o four_of_a_kind.cpp
+
+full_house.o: full_house.cpp Parameter.h \
+		Combination.h \
+		Player.h \
+		Card.h \
+		full_house.h \
+		Game.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o full_house.o full_house.cpp
 
 Game.o: Game.cpp Game.h \
 		Parameter.h \
 		Card.h \
 		Player.h \
-		Combination.h
+		Combination.h \
+		straight.h \
+		straight_flush.h \
+		four_of_a_kind.h \
+		full_house.h \
+		pair2.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Game.o Game.cpp
 
 main.o: main.cpp Game.h \
@@ -479,11 +556,34 @@ main.o: main.cpp Game.h \
 		Combination.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
+pair2.o: pair2.cpp Parameter.h \
+		Combination.h \
+		Player.h \
+		Card.h \
+		pair2.h \
+		Game.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pair2.o pair2.cpp
+
 Player.o: Player.cpp Parameter.h \
 		Player.h \
-		Combination.h \
 		Card.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Player.o Player.cpp
+
+straight.o: straight.cpp Parameter.h \
+		Combination.h \
+		Player.h \
+		Card.h \
+		straight.h \
+		Game.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o straight.o straight.cpp
+
+straight_flush.o: straight_flush.cpp Parameter.h \
+		Combination.h \
+		Player.h \
+		Card.h \
+		straight_flush.h \
+		Game.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o straight_flush.o straight_flush.cpp
 
 moc_Card.o: moc_Card.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_Card.o moc_Card.cpp
@@ -494,11 +594,23 @@ moc_Combination.o: moc_Combination.cpp
 moc_four_of_a_kind.o: moc_four_of_a_kind.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_four_of_a_kind.o moc_four_of_a_kind.cpp
 
+moc_full_house.o: moc_full_house.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_full_house.o moc_full_house.cpp
+
 moc_Game.o: moc_Game.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_Game.o moc_Game.cpp
 
+moc_pair2.o: moc_pair2.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_pair2.o moc_pair2.cpp
+
 moc_Player.o: moc_Player.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_Player.o moc_Player.cpp
+
+moc_straight.o: moc_straight.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_straight.o moc_straight.cpp
+
+moc_straight_flush.o: moc_straight_flush.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_straight_flush.o moc_straight_flush.cpp
 
 ####### Install
 

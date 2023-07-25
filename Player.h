@@ -12,18 +12,18 @@ class Player : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Player( QGraphicsItem *parent = 0);
+    Player(QGraphicsItem *parent = 0);
 
     void sortCards();
     void addCard(Card *);
     void cardNumberCal();
-
+    void cardSuitCal();
 
     std::vector<Card *> ownCards;
 
-    
+    std::vector<std::vector<Card *>> cardNumber;
+    std::vector<std::vector<Card *>> cardSuit;
 
-    std::vector<int> cardNumber;
     // Qbutton
 
 private:

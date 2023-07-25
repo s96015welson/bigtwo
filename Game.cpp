@@ -20,6 +20,11 @@
 #include "unistd.h"
 #include <string>
 #include "Parameter.h"
+#include "straight.h"
+#include "straight_flush.h"
+#include "four_of_a_kind.h"
+#include "full_house.h"
+#include "pair2.h"
 
 using namespace std;
 Game::Game(QWidget *parent)
@@ -197,6 +202,7 @@ void Game::shuffleAndDealCard()
             cards.erase(cards.begin() + r);
         }
 
+    /*
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < players.at(i)->ownCards.size(); j++)
@@ -206,13 +212,13 @@ void Game::shuffleAndDealCard()
         }
         cout << "\n";
     }
+    */
     // sort card
     for (int i = 0; i < players.size(); i++)
         players.at(i)->sortCards();
 }
 void Game::del()
 {
-    cout << "kk" << endl;
 }
 
 void Game::cardButtonEvent(int i)
@@ -269,6 +275,8 @@ void Game::gameFlow()
 
     showNowPlayerOwnCards();
     showOtherPlayersOwnCard();
+
+    showCombination();
 }
 
 void Game::showNowPlayerOwnCards()
@@ -340,5 +348,73 @@ void Game::showOtherPlayersOwnCard()
         new_cardback->setPixmap(QPixmap("./Dataset/CardBack.jpg").scaled(CARDBACK_HEIGHT, CARDBACK_WIDTH));
         scene->addItem(new_cardback);
         cardBacks.push_back(new_cardback);
+    }
+}
+
+void Game::showCombination()
+{
+    vector<Combination *> combination_types;
+
+    Straight_Flush = new straight_flush(now_player);
+    combination_types.push_back(Straight_Flush);
+
+    Four_of_a_Kind = new four_of_a_kind(now_player);
+    combination_types.push_back(Four_of_a_Kind);
+
+    Full_House = new full_house(now_player);
+    combination_types.push_back(Full_House);
+
+    Straight = new straight(now_player);
+    combination_types.push_back(Straight);
+
+    Pair = new pair2(now_player);
+    combination_types.push_back(Pair);
+
+
+    for (int k = 0; k < 5; k++)
+    {
+        switch (k)
+        {
+        case (0):
+            cout << "Straight_Flush:" << endl;
+            break;
+        case (1):
+            cout << "Four_of_a_Kind:" << endl;
+            break;
+        case (2):
+            cout << "Full_House:" << endl;
+            break;
+        case (3):
+            cout << "Straight:" << endl;
+            break;
+        case (4):
+            cout << "Pair:" << endl;
+            break;
+
+        default:
+            break;
+        }
+        if (k != 4)
+        {
+            for (int i = 0; i < combination_types.at(k)->combinations.size(); i++)
+            {
+                cout << (int)combination_types.at(k)->combinations[i][0]->num + 3 << "/" << (int)combination_types.at(k)->combinations[i][0]->suit << " ";
+                cout << (int)combination_types.at(k)->combinations[i][1]->num + 3 << "/" << (int)combination_types.at(k)->combinations[i][1]->suit << " ";
+                cout << (int)combination_types.at(k)->combinations[i][2]->num + 3 << "/" << (int)combination_types.at(k)->combinations[i][2]->suit << " ";
+                cout << (int)combination_types.at(k)->combinations[i][3]->num + 3 << "/" << (int)combination_types.at(k)->combinations[i][3]->suit << " ";
+                cout << (int)combination_types.at(k)->combinations[i][4]->num + 3 << "/" << (int)combination_types.at(k)->combinations[i][4]->suit << " ";
+                cout << "\n";
+            }
+        }
+        else
+        {
+            for (int i = 0; i < combination_types.at(k)->combinations.size(); i++)
+            {
+                cout << (int)combination_types.at(k)->combinations[i][0]->num + 3 << "/" << (int)combination_types.at(k)->combinations[i][0]->suit << " ";
+                cout << (int)combination_types.at(k)->combinations[i][1]->num + 3 << "/" << (int)combination_types.at(k)->combinations[i][1]->suit << " ";
+                cout << "\n";
+            }
+        }
+        cout<<"\n";
     }
 }

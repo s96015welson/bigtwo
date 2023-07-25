@@ -15,6 +15,7 @@ Player::Player(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
 {
     ownCards.clear();
     cardNumber.clear();
+    cardSuit.clear();
 }
 
 void Player::sortCards()
@@ -36,16 +37,31 @@ void Player::cardNumberCal()
 {
     cardNumber.clear();
     for (int i = 0; i < 13; i++)
-        cardNumber.push_back(0);
-    
-    for(int i=0;i<ownCards.size();i++)
     {
-        cardNumber.at((int)(ownCards.at(i)->num))++;
+        std::vector<Card *> new_cardptr;
+        cardNumber.push_back(new_cardptr);
+    }
+
+    for (int i = 0; i < ownCards.size(); i++)
+    {
+        cardNumber[(int)(ownCards.at(i)->num)].push_back(ownCards.at(i));
+    }
+}
+void Player::cardSuitCal()
+{
+    cardSuit.clear();
+    for (int i = 0; i < 4; i++)
+    {
+        std::vector<Card *> new_cardptr;
+        cardSuit.push_back(new_cardptr);
+    }
+
+    for (int i = 0; i < ownCards.size(); i++)
+    {
+        cardNumber[((int)(ownCards.at(i)->suit))].push_back(ownCards.at(i));
     }
 }
 void Player::addCard(Card *new_card)
 {
     ownCards.push_back(new_card);
 }
-
-

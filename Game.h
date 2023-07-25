@@ -44,12 +44,15 @@ private:
     void showOtherPlayersOwnCard();
     void player_turn(int);
     void gameFlow();
+    void showCombination();
 
     QPushButton *btnSF; // 同花順
     QPushButton *btnFK; // 鐵支
     QPushButton *btnFH; // 葫蘆
     QPushButton *btnS;  // 順子
     QPushButton *btnP;  // 一對
+    QPushButton *btnPass;  // Pass
+    QPushButton *btnDeal;  // 出牌
 
     Combination *Straight_Flush;
     Combination *Four_of_a_Kind;

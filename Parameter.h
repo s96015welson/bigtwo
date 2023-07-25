@@ -85,4 +85,17 @@ enum Number
     // top
 };
 
+
+enum CombinationType
+{
+    // buttom
+    Straight_Flush,
+    Four_of_a_Kind,
+    Full_House,
+    Straighth,
+    Pair,
+    Single
+    // buttom
+};
+
 #endif // PARAMETER_H

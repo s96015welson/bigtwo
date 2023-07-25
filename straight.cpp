@@ -1,21 +1,22 @@
 #include <QTimer>
 #include <QList>
 #include <cstdlib>
+#include <iostream>
 #include <QPixmap>
 #include "Parameter.h"
 #include "Combination.h"
-#include "four_of_a_kind.h"
+#include "straight.h"
 #include "Game.h"
 
 // extern Game *game;
 
-four_of_a_kind::four_of_a_kind(Player *now_player) : Combination()
+straight::straight(Player *now_player) : Combination()
 {
     player = now_player;
     find_all_this_combination();
 }
 
-void four_of_a_kind::find_all_this_combination()
+void straight::find_all_this_combination()
 {
     player->cardNumberCal();
     if (player->ownCards.size() == 0)
@@ -26,11 +27,11 @@ void four_of_a_kind::find_all_this_combination()
     return;
 }
 
-void four_of_a_kind::findCombinations(std::vector<Card *> hand, std::vector<Card *> currentCombination, int index, int count)
+void straight::findCombinations(std::vector<Card *> hand, std::vector<Card *> currentCombination, int index, int count)
 {
     if (currentCombination.size() == 5)
     {
-        // 若是four_of_a_kind，存到combinations
+        // 若是straight，存到combinations
         if (is_this_combination(currentCombination))
             combinations.push_back(currentCombination);
 
@@ -45,11 +46,17 @@ void four_of_a_kind::findCombinations(std::vector<Card *> hand, std::vector<Card
     }
 }
 
-bool four_of_a_kind::is_this_combination(std::vector<Card *> nowC)
+bool straight::is_this_combination(std::vector<Card *> nowC)
 {
-    if (nowC[0]->num == nowC[1]->num && nowC[1]->num == nowC[2]->num && nowC[2]->num == nowC[3]->num)
+    if (nowC[0]->num == C3 && nowC[1]->num == C4 && nowC[2]->num == C5 && nowC[3]->num == A && nowC[4]->num == C2)
         return true;
-    else if (nowC[1]->num == nowC[2]->num && nowC[2]->num == nowC[3]->num && nowC[3]->num == nowC[4]->num)
+    else if (nowC[0]->num == C3 && nowC[1]->num == C4 && nowC[2]->num == C5 && nowC[3]->num == C6 && nowC[4]->num == C2)
         return true;
+    else
+    {
+        for (int i = (int)C3; i < (int)C10; i++)
+            if ((nowC[0]->num == (Number)(i)) && nowC[1]->num == (Number)(i + 1) && nowC[2]->num == (Number)(i + 2) && nowC[3]->num == (Number)(i + 3) && nowC[4]->num == (Number)(i + 4))
+                return true;
+    }
     return false;
 }

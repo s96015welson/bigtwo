@@ -9,8 +9,16 @@
 
 Combination::Combination() : QObject()
 {
+    combinations.clear();
 
 }
 
+bool Combination::has_this_kind()
+{
+    if (!combinations.empty())
+        return true;
+    else
+        return false;
+}
 
 
