@@ -29,24 +29,20 @@
 #define CARD_BTN_Y 650
 #define CARD_BTN_Y_clicked 600
 
-
 #define CARDBACK_WIDTH 75
 #define CARDBACK_HEIGHT 110
 
 #define CARDBACK_LEFT_X 80
 #define CARDBACK_LEFT_Y 100
-#define CARDBACK_LEFT_Y_LENGTH 450
 
 #define CARDBACK_RIGHT_X 923
 #define CARDBACK_RIGHT_Y 600
-#define CARDBACK_RIGHT_Y_LENGTH 450
 
 #define CARDBACK_UP_X_LEFT 300
-#define CARDBACK_UP_X_LENGTH 450
 #define CARDBACK_UP_Y 50
 
-
-
+#define CARDBACK_Y_UNIT 30
+#define CARDBACK_X_UNIT 35
 // Card
 enum ITEM_ORDER
 {
@@ -64,7 +60,7 @@ enum Suit
     Diamonds, // 1
     Hearts,   // 2
     Spades,   // 3
-            // top
+              // top
 };
 enum Number
 {
@@ -85,16 +81,16 @@ enum Number
     // top
 };
 
-
 enum CombinationType
 {
     // buttom
-    Straight_Flush,
-    Four_of_a_Kind,
-    Full_House,
-    Straighth,
-    Pair,
-    Single
+    Straight_Flush, // 0
+    Four_of_a_Kind, // 1
+    Full_House,     // 2
+    Straight,       // 3
+    Pair,           // 4
+    Single,         // 5
+    None
     // buttom
 };
 

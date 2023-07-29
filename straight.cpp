@@ -48,6 +48,8 @@ void straight::findCombinations(std::vector<Card *> hand, std::vector<Card *> cu
 
 bool straight::is_this_combination(std::vector<Card *> nowC)
 {
+    if (nowC.size() != 5)
+        return false;
     if (nowC[0]->num == C3 && nowC[1]->num == C4 && nowC[2]->num == C5 && nowC[3]->num == A && nowC[4]->num == C2)
         return true;
     else if (nowC[0]->num == C3 && nowC[1]->num == C4 && nowC[2]->num == C5 && nowC[3]->num == C6 && nowC[4]->num == C2)
@@ -60,3 +62,20 @@ bool straight::is_this_combination(std::vector<Card *> nowC)
     }
     return false;
 }
+bool straight::compare_combination(std::vector<Card *> newC, std::vector<Card *> oldC)
+{
+    if (newC.at(3)->num == A && oldC.at(3)->num != A)
+        return false;
+    else if (newC.at(3)->num == A && oldC.at(3)->num == A)
+        return newC.at(3)->suit > oldC.at(3)->suit;
+    else if (newC.at(4)->num == C2 && oldC.at(4)->num != C2)
+        return true;
+    else if (newC.at(4)->num == A && oldC.at(4)->num == A)
+        return newC.at(4)->suit > oldC.at(4)->suit;
+    else if (newC.at(4)->num > oldC.at(4)->num)
+        return true;
+    else if (newC.at(4)->num == oldC.at(4)->num)
+        return newC.at(4)->suit > oldC.at(4)->suit;
+    else
+        return false;
+};

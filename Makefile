@@ -35,7 +35,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = bigtwo1.0.0
-DISTDIR = /home/s9601/bigtwo/.tmp/bigtwo1.0.0
+DISTDIR = /home/User/bigtwo/.tmp/bigtwo1.0.0
 LINK          = g++
 LFLAGS        = 
 LIBS          = $(SUBLIBS) -lQt5Widgets -lQt5Multimedia -lQt5Gui -lQt5Network -lQt5Core -lGL -lpthread 
@@ -421,7 +421,7 @@ moc_Card.cpp: Parameter.h \
 		Card.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api Card.h -o moc_Card.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/User/bigtwo -I/home/User/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/10/include -I/usr/include -I/usr/include/w32api Card.h -o moc_Card.cpp
 
 moc_Combination.cpp: Parameter.h \
 		Player.h \
@@ -429,7 +429,7 @@ moc_Combination.cpp: Parameter.h \
 		Combination.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api Combination.h -o moc_Combination.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/User/bigtwo -I/home/User/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/10/include -I/usr/include -I/usr/include/w32api Combination.h -o moc_Combination.cpp
 
 moc_four_of_a_kind.cpp: Parameter.h \
 		Combination.h \
@@ -439,7 +439,7 @@ moc_four_of_a_kind.cpp: Parameter.h \
 		four_of_a_kind.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api four_of_a_kind.h -o moc_four_of_a_kind.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/User/bigtwo -I/home/User/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/10/include -I/usr/include -I/usr/include/w32api four_of_a_kind.h -o moc_four_of_a_kind.cpp
 
 moc_full_house.cpp: Parameter.h \
 		Combination.h \
@@ -449,7 +449,7 @@ moc_full_house.cpp: Parameter.h \
 		full_house.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api full_house.h -o moc_full_house.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/User/bigtwo -I/home/User/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/10/include -I/usr/include -I/usr/include/w32api full_house.h -o moc_full_house.cpp
 
 moc_Game.cpp: Parameter.h \
 		Card.h \
@@ -458,7 +458,7 @@ moc_Game.cpp: Parameter.h \
 		Game.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api Game.h -o moc_Game.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/User/bigtwo -I/home/User/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/10/include -I/usr/include -I/usr/include/w32api Game.h -o moc_Game.cpp
 
 moc_pair2.cpp: Parameter.h \
 		Combination.h \
@@ -468,14 +468,14 @@ moc_pair2.cpp: Parameter.h \
 		pair2.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api pair2.h -o moc_pair2.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/User/bigtwo -I/home/User/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/10/include -I/usr/include -I/usr/include/w32api pair2.h -o moc_pair2.cpp
 
 moc_Player.cpp: Parameter.h \
 		Card.h \
 		Player.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api Player.h -o moc_Player.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/User/bigtwo -I/home/User/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/10/include -I/usr/include -I/usr/include/w32api Player.h -o moc_Player.cpp
 
 moc_straight.cpp: Parameter.h \
 		Combination.h \
@@ -485,7 +485,7 @@ moc_straight.cpp: Parameter.h \
 		straight.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api straight.h -o moc_straight.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/User/bigtwo -I/home/User/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/10/include -I/usr/include -I/usr/include/w32api straight.h -o moc_straight.cpp
 
 moc_straight_flush.cpp: Parameter.h \
 		Combination.h \
@@ -495,7 +495,7 @@ moc_straight_flush.cpp: Parameter.h \
 		straight_flush.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/s9601/bigtwo -I/home/s9601/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/11/include -I/usr/include -I/usr/include/w32api straight_flush.h -o moc_straight_flush.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt5/mkspecs/cygwin-g++ -I/home/User/bigtwo -I/home/User/bigtwo -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtMultimedia -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++ -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/x86_64-pc-cygwin -I/usr/lib/gcc/x86_64-pc-cygwin/10/include/c++/backward -I/usr/lib/gcc/x86_64-pc-cygwin/10/include -I/usr/include -I/usr/include/w32api straight_flush.h -o moc_straight_flush.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:

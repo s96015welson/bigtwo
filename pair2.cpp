@@ -46,11 +46,22 @@ void pair2::findCombinations(std::vector<Card *> hand, std::vector<Card *> curre
 bool pair2::is_this_combination(std::vector<Card *> nowC)
 {
 
-    if (nowC[0]->num == nowC[1]->num)
+    if (nowC.size() != 2)
+        return false;
+    else if (nowC[0]->num == nowC[1]->num)
         return true;
     else
         return false;
 }
+bool pair2::compare_combination(std::vector<Card *> newC, std::vector<Card *> oldC)
+{
+    if (newC.at(1)->num > oldC.at(1)->num)
+        return true;
+    else if (newC.at(1)->num == oldC.at(1)->num && newC.at(1)->suit == oldC.at(1)->suit)
+        return true;
+    else
+        return false;
+};
 /*
 
 // extern Game *game;

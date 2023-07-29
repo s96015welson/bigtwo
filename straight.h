@@ -15,7 +15,8 @@ public:
 
     virtual void find_all_this_combination() ;
     virtual bool is_this_combination(std::vector<Card *>);
-    CombinationType combination_type = Straighth;
+    virtual bool compare_combination(std::vector<Card *>,std::vector<Card *>);
+    CombinationType combination_type = Straight;
 
 private:
     void findCombinations(const std::vector<Card *> , std::vector<Card *> , int, int );

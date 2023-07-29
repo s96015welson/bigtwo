@@ -15,6 +15,7 @@ public:
 
     virtual void find_all_this_combination() ;
     virtual bool is_this_combination(std::vector<Card *>);
+    virtual bool compare_combination(std::vector<Card *>,std::vector<Card *>);
     CombinationType combination_type = Four_of_a_Kind;
 
 private:

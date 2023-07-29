@@ -47,6 +47,8 @@ void straight_flush::findCombinations(std::vector<Card *> hand, std::vector<Card
 
 bool straight_flush::is_this_combination(std::vector<Card *> nowC)
 {
+    if (nowC.size() != 5)
+        return false;
     if (nowC[0]->suit == nowC[1]->suit && nowC[1]->suit == nowC[2]->suit && nowC[2]->suit == nowC[3]->suit && nowC[3]->suit == nowC[4]->suit)
     {
         if (nowC[0]->num == C3 && nowC[1]->num == C4 && nowC[2]->num == C5 && nowC[3]->num == A && nowC[4]->num == C2)
@@ -63,3 +65,20 @@ bool straight_flush::is_this_combination(std::vector<Card *> nowC)
 
     return false;
 }
+bool straight_flush::compare_combination(std::vector<Card *> newC, std::vector<Card *> oldC)
+{
+    if (newC.at(3)->num == A && oldC.at(3)->num != A)
+        return false;
+    else if (newC.at(3)->num == A && oldC.at(3)->num == A)
+        return newC.at(3)->suit > oldC.at(3)->suit;
+    else if (newC.at(4)->num == C2 && oldC.at(4)->num != C2)
+        return true;
+    else if (newC.at(4)->num == A && oldC.at(4)->num == A)
+        return newC.at(4)->suit > oldC.at(4)->suit;
+    else if (newC.at(4)->num > oldC.at(4)->num)
+        return true;
+    else if (newC.at(4)->num == oldC.at(4)->num)
+        return newC.at(4)->suit > oldC.at(4)->suit;
+    else
+        return false;
+};

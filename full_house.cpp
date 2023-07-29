@@ -45,10 +45,19 @@ void full_house::findCombinations(std::vector<Card *> hand, std::vector<Card *> 
 
 bool full_house::is_this_combination(std::vector<Card *> nowC)
 {
-    if (nowC[0]->num == nowC[1]->num && nowC[2]->num == nowC[3]->num && nowC[3]->num == nowC[4]->num)
+    if (nowC.size() != 5)
+        return false;
+    else if (nowC[0]->num == nowC[1]->num && nowC[2]->num == nowC[3]->num && nowC[3]->num == nowC[4]->num)
         return true;
     else if (nowC[0]->num == nowC[1]->num && nowC[1]->num == nowC[2]->num && nowC[3]->num == nowC[4]->num)
         return true;
 
     return false;
 }
+bool full_house::compare_combination(std::vector<Card *> newC, std::vector<Card *> oldC)
+{
+    if (newC.at(2)->num > oldC.at(2)->num)
+        return true;
+    else
+        return false;
+};

@@ -13,11 +13,14 @@ public:
 
     virtual void find_all_this_combination()=0;
     virtual bool is_this_combination(std::vector<Card *>)=0;
+    virtual bool compare_combination(std::vector<Card *>,std::vector<Card *>)=0;
     Player *player;
     std::vector<std::vector<Card *>> combinations;
 
     //
-    bool has_this_kind( );
+    bool has_this_kind();
+    void find_enable();
+    
 
 private:
 };
