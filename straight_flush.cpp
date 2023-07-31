@@ -57,7 +57,7 @@ bool straight_flush::is_this_combination(std::vector<Card *> nowC)
             return true;
         else
         {
-            for (int i = (int)C3; i < (int)C10; i++)
+            for (int i = (int)C3; i <= (int)C10; i++)
                 if ((nowC[0]->num == (Number)(i)) && nowC[1]->num == (Number)(i + 1) && nowC[2]->num == (Number)(i + 2) && nowC[3]->num == (Number)(i + 3) && nowC[4]->num == (Number)(i + 4))
                     return true;
         }
@@ -69,10 +69,14 @@ bool straight_flush::compare_combination(std::vector<Card *> newC, std::vector<C
 {
     if (newC.at(3)->num == A && oldC.at(3)->num != A)
         return false;
+    else if (newC.at(3)->num != A && oldC.at(3)->num == A)
+        return true;
     else if (newC.at(3)->num == A && oldC.at(3)->num == A)
         return newC.at(3)->suit > oldC.at(3)->suit;
     else if (newC.at(4)->num == C2 && oldC.at(4)->num != C2)
         return true;
+    else if (newC.at(4)->num != C2 && oldC.at(4)->num == C2)
+        return false;
     else if (newC.at(4)->num == A && oldC.at(4)->num == A)
         return newC.at(4)->suit > oldC.at(4)->suit;
     else if (newC.at(4)->num > oldC.at(4)->num)

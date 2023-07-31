@@ -12,12 +12,15 @@ class Player : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Player(QGraphicsItem *parent = 0);
+    Player(int,QGraphicsItem *parent = 0);
 
     void sortCards();
     void addCard(Card *);
     void cardNumberCal();
     void cardSuitCal();
+    int player_num;
+    bool Pass = false;
+    int score=0;
 
     std::vector<Card *> ownCards;
 

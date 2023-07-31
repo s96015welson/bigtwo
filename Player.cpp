@@ -11,11 +11,12 @@
 
 // extern Game *game; // there is an external global object called game
 
-Player::Player(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
+Player::Player(int num, QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
 {
     ownCards.clear();
-    cardNumber.clear();
-    cardSuit.clear();
+    //cardNumber.clear();
+    //cardSuit.clear();
+    player_num = num;
 }
 
 void Player::sortCards()

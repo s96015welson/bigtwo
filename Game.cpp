@@ -6,10 +6,10 @@
 #include <QTimer>
 #include <QGraphicsTextItem>
 #include <QFont>
-#include <QTimer>
+#include <QLabel>
 #include <QDebug>
 #include <QObject>
-#include <QSound>
+#include <QString>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSignalMapper>
@@ -37,30 +37,13 @@ Game::Game(QWidget *parent)
     srand(time(NULL));
     createScene();
 
+    initial();
     // reset
     reset();
     // game flow
-    gameStart();
+    // gameStart();
 
     show();
-}
-
-void Game::ShowMsg()
-{
-    /*
-    QMessageBox msgBox;
-    // QString final_score = ;
-
-    msgBox.setStyleSheet("QLabel{"
-                         "min-width:180px;"
-                         "min-height:100px;"
-                         "font-size:16px;"
-                         "}");
-    QString qStr1 = "Game Over!\nFinal Score:";
-    QString qStr2 = QString::number(score->getScore());
-    msgBox.setText(qStr1 + qStr2);
-    msgBox.exec();
-    */
 }
 
 void Game::createScene()
@@ -76,23 +59,156 @@ void Game::createScene()
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+}
 
-    // ADD BACKGROUND
-    /*
+void Game::ShowMsg()
+{
+    QMessageBox msgBox;
+    // QString final_score = ;
 
-        QGraphicsPixmapItem *pic = new QGraphicsPixmapItem();
-        pic->setPixmap(QPixmap("./dataset/images/background.png").scaled(SCREEN_WIDTH,SCREEN_HEIGHT));
-        scene->addItem(pic);
-        pic->setPos(0, 0);
-       */
+    msgBox.setStyleSheet("QLabel{"
+                         "min-width:300px;"
+                         "min-height:300px;"
+                         "font-size:25px;"
+                         "}");
+
+    QString qStr = "第" + QString::number(Gametimes) + "次遊戲結束!\n";
+    qStr += "Player1 Score:" + QString::number(players.at(0)->score) + "\n";
+    qStr += "Player2 Score:" + QString::number(players.at(1)->score) + "\n";
+    qStr += "Player3 Score:" + QString::number(players.at(2)->score) + "\n";
+    qStr += "Player4 Score:" + QString::number(players.at(3)->score) + "\n\n";
+
+    if (topScore < 50)
+        qStr += "繼續下一局遊戲";
+    else
+    {
+        qStr += "遊戲結束!";
+        if (players.at(0)->score == topScore)
+            qStr += "Player1 獲勝";
+        if (players.at(1)->score == topScore)
+            qStr += "Player2 獲勝";
+        if (players.at(2)->score == topScore)
+            qStr += "Player3 獲勝";
+        if (players.at(3)->score == topScore)
+            qStr += "Player4 獲勝";
+    }
+
+    msgBox.setText(qStr);
+    Gametimes++;
+    msgBox.exec();
+}
+
+void Game::initial()
+{
 }
 
 void Game::reset()
 {
+    first_one_deal = false;
+    Gametimes = 1;
+    topScore = 0;
+    lastwin = 0;
     // clear vectors
+
     players.clear();
     cards.clear();
+    // clear show on scene items
+    while (!nowcardsBTNs.empty())
+    {
+        nowcardsBTNs.back()->deleteLater();
+        nowcardsBTNs.pop_back();
+    }
+    while (!cardBacks.empty())
+    {
+        scene->removeItem(cardBacks.back());
+        delete cardBacks.back();
+        cardBacks.pop_back();
+    }
+    while (!hasDealCards.empty())
+    {
+        scene->removeItem(hasDealCards.back());
+        delete hasDealCards.back();
+        hasDealCards.pop_back();
+    }
+    while (!hasDealCards.empty())
+    {
+        scene->removeItem(hasDealCards.back());
+        delete hasDealCards.back();
+        hasDealCards.pop_back();
+    }
+    while (!playerLabel.empty())
+    {
+        playerLabel.back()->deleteLater();
+        playerLabel.pop_back();
+    }
 
+    /*
+    if (btnSF != nullptr)
+    {
+        QPushButton *dbtn;
+
+        dbtn = btnSF;
+        btnSF = nullptr;
+        dbtn->deleteLater();
+
+        dbtn = btnFK;
+        btnFK = nullptr;
+        dbtn->deleteLater();
+
+        dbtn = btnFH;
+        btnFH = nullptr;
+        dbtn->deleteLater();
+
+        dbtn = btnS;
+        btnS = nullptr;
+        dbtn->deleteLater();
+
+        dbtn = btnP;
+        btnP = nullptr;
+        dbtn->deleteLater();
+
+        dbtn = btnPass;
+        btnPass = nullptr;
+        dbtn->deleteLater();
+
+        dbtn = btnDeal;
+        btnDeal = nullptr;
+        dbtn->deleteLater();
+    }
+    */
+
+    // initial button
+    if (afterstart == false)
+    {
+        setInitialScene();
+    }
+
+    else
+    {
+        setButton();
+        // generate player
+        for (int i = 0; i < PLAYER_NUM; i++)
+        {
+            Player *new_player = new Player(i + 1);
+            players.push_back(new_player);
+        }
+        gameStart();
+    }
+}
+
+void Game::gameStart()
+{
+    // reset & clear
+    last_type = None;
+    last_combination.clear();
+    selected_type = None;
+    selected_cards.clear();
+    Passtime = 0;
+    for (Player *player : players)
+    {
+        player->ownCards.clear();
+    }
+    // clear show on scene items
     while (!nowcardsBTNs.empty())
     {
         delete nowcardsBTNs.back();
@@ -104,17 +220,34 @@ void Game::reset()
         delete cardBacks.back();
         cardBacks.pop_back();
     }
-
-    // initial button
-    setButton();
-    // generate player
-    for (int i = 0; i < PLAYER_NUM; i++)
+    while (!hasDealCards.empty())
     {
-        Player *new_player = new Player();
-        players.push_back(new_player);
+        scene->removeItem(hasDealCards.back());
+        delete hasDealCards.back();
+        hasDealCards.pop_back();
     }
-}
 
+    // deliver card
+    shuffleAndDealCard();
+
+    int first_player;
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 13; j++)
+        {
+            if (players.at(i)->ownCards.at(j)->num == C3 && players.at(i)->ownCards.at(j)->suit == Clubs)
+            {
+                first_player = (i) % 4;
+                break;
+            }
+        }
+    }
+
+    if (lastwin != 0)
+        nextPlayer(lastwin - 1);
+    else
+        nextPlayer(first_player);
+}
 void Game::keyPressEvent(QKeyEvent *event)
 {
 }
@@ -128,14 +261,6 @@ void Game::updating()
 void Game::setButton()
 {
 
-    // imageA->setIconSize(pic.size());
-
-    /*
-    QPushButton *btnPP = new QPushButton;
-    btnPP->setParent(this);
-    btnPP->setText("delete");
-    QObject::connect(btnPP, SIGNAL(clicked()), this, SLOT(del()));
-    */
     QSignalMapper *signalMapperL = new QSignalMapper(this);
 
     btnPass = new QPushButton;
@@ -145,6 +270,7 @@ void Game::setButton()
     btnPass->resize(BTN_WIDTH * 0.5, BTN_HEIGHT);
     btnPass->setFont(QFont("Courier", 18, QFont::Bold));
     QObject::connect(btnPass, SIGNAL(clicked()), this, SLOT(Pass()));
+    btnPass->show();
 
     btnDeal = new QPushButton;
     btnDeal->setParent(this);
@@ -153,6 +279,7 @@ void Game::setButton()
     btnDeal->resize(BTN_WIDTH * 0.5, BTN_HEIGHT);
     btnDeal->setFont(QFont("Courier", 18, QFont::Bold));
     QObject::connect(btnDeal, SIGNAL(clicked()), this, SLOT(Deal()));
+    btnDeal->show();
 
     btnSF = new QPushButton;
     btnSF->setParent(this);
@@ -162,6 +289,7 @@ void Game::setButton()
     btnSF->setFont(QFont("Courier", 18, QFont::Bold));
     QObject::connect(btnSF, SIGNAL(clicked()), signalMapperL, SLOT(map()));
     signalMapperL->setMapping(btnSF, (int)Straight_Flush);
+    btnSF->show();
 
     btnFK = new QPushButton;
     btnFK->setParent(this);
@@ -171,6 +299,7 @@ void Game::setButton()
     btnFK->setFont(QFont("Courier", 18, QFont::Bold));
     QObject::connect(btnFK, SIGNAL(clicked()), signalMapperL, SLOT(map()));
     signalMapperL->setMapping(btnFK, (int)Four_of_a_Kind);
+    btnFK->show();
 
     btnFH = new QPushButton;
     btnFH->setParent(this);
@@ -180,6 +309,7 @@ void Game::setButton()
     btnFH->setFont(QFont("Courier", 18, QFont::Bold));
     QObject::connect(btnFH, SIGNAL(clicked()), signalMapperL, SLOT(map()));
     signalMapperL->setMapping(btnFH, (int)Full_House);
+    btnFH->show();
 
     btnS = new QPushButton;
     btnS->setParent(this);
@@ -189,6 +319,7 @@ void Game::setButton()
     btnS->setFont(QFont("Courier", 18, QFont::Bold));
     QObject::connect(btnS, SIGNAL(clicked()), signalMapperL, SLOT(map()));
     signalMapperL->setMapping(btnS, (int)Straight);
+    btnS->show();
 
     btnP = new QPushButton;
     btnP->setParent(this);
@@ -198,6 +329,7 @@ void Game::setButton()
     btnP->setFont(QFont("Courier", 18, QFont::Bold));
     QObject::connect(btnP, SIGNAL(clicked()), signalMapperL, SLOT(map()));
     signalMapperL->setMapping(btnP, (int)Pair);
+    btnP->show();
 
     QObject::connect(signalMapperL, SIGNAL(mapped(int)), this, SLOT(switchCombinationalType(int)));
 }
@@ -214,12 +346,6 @@ void Game::shuffleAndDealCard()
             cards.push_back(new_card);
         }
     }
-    /*
-    for (int i = 0; i < cards.size(); i++)
-    {
-        cout << cards.at(i)->num << " " << cards.at(i)->suit << "jjj\n";
-    }
-    */
     // deliver card
     for (int i = 0; i < 13; i++)
     {
@@ -231,23 +357,9 @@ void Game::shuffleAndDealCard()
         }
     }
 
-    /*
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < players.at(i)->ownCards.size(); j++)
-        {
-            cout << players.at(i)->ownCards.at(j)->num << " "
-                 << players.at(i)->ownCards.at(j)->suit << "\n";
-        }
-        cout << "\n";
-    }
-    */
     // sort card
     for (int i = 0; i < players.size(); i++)
         players.at(i)->sortCards();
-}
-void Game::del()
-{
 }
 
 void Game::cardButtonEvent(int i)
@@ -323,14 +435,13 @@ void Game::cardButtonEvent(int i)
         }
     }
 
-    else if ((last_type == Single || last_type == None) && selected_cards.size() == 1)
+    else if ((last_type == Single || last_type == None) && selected_cards.size() == 1) // single &None
     {
         if (last_combination.empty())
             btnDeal->setDisabled(false);
         else if (((selected_cards.at(0)->num > last_combination.at(0)->num) || (selected_cards.at(0)->num == last_combination.at(0)->num && selected_cards.at(0)->suit > last_combination.at(0)->suit)))
             btnDeal->setDisabled(false);
     }
-  
 
     if (first_one_deal == true)
     {
@@ -375,6 +486,9 @@ void Game::player_turn(int newP)
     default:
         break;
     }
+
+    // set label
+    setPlayerText();
 }
 
 void Game::showNowPlayerOwnCards()
@@ -384,11 +498,7 @@ void Game::showNowPlayerOwnCards()
     // remove old btns
     while (!nowcardsBTNs.empty())
     {
-        // nowcardsBTNs.back()->setParent(nullptr);
-        // QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget;
-        // proxy->setWidget(nowcardsBTNs.back());
-        // scene->addWidget(nowcardsBTNs.back());
-        // scene->removeItem(proxy);
+
         nowcardsBTNs.back()->deleteLater();
         nowcardsBTNs.pop_back();
     }
@@ -434,7 +544,7 @@ void Game::showOtherPlayersOwnCard()
     for (int i = 0; i < other_players.at(0)->ownCards.size(); i++)
     {
         QGraphicsPixmapItem *new_cardback = new (QGraphicsPixmapItem);
-        new_cardback->setPos(CARDBACK_LEFT_X, CARDBACK_LEFT_Y + CARDBACK_Y_UNIT * i);
+        new_cardback->setPos(CARDBACK_RIGHT_X, CARDBACK_RIGHT_Y - CARDBACK_Y_UNIT * i);
         new_cardback->setPixmap(QPixmap("./Dataset/CardBackL.jpg").scaled(CARDBACK_HEIGHT, CARDBACK_WIDTH));
         scene->addItem(new_cardback);
         cardBacks.push_back(new_cardback);
@@ -443,7 +553,7 @@ void Game::showOtherPlayersOwnCard()
     for (int i = 0; i < other_players.at(1)->ownCards.size(); i++)
     {
         QGraphicsPixmapItem *new_cardback = new (QGraphicsPixmapItem);
-        new_cardback->setPos(CARDBACK_UP_X_LEFT + CARDBACK_X_UNIT * i, CARDBACK_UP_Y);
+        new_cardback->setPos(CARDBACK_UP_X_RIGHT - CARDBACK_X_UNIT * i, CARDBACK_UP_Y);
         new_cardback->setPixmap(QPixmap("./Dataset/CardBack.jpg").scaled(CARDBACK_WIDTH, CARDBACK_HEIGHT));
         scene->addItem(new_cardback);
         cardBacks.push_back(new_cardback);
@@ -452,7 +562,7 @@ void Game::showOtherPlayersOwnCard()
     for (int i = 0; i < other_players.at(2)->ownCards.size(); i++)
     {
         QGraphicsPixmapItem *new_cardback = new (QGraphicsPixmapItem);
-        new_cardback->setPos(CARDBACK_RIGHT_X, CARDBACK_RIGHT_Y - CARDBACK_Y_UNIT * i);
+        new_cardback->setPos(CARDBACK_LEFT_X, CARDBACK_LEFT_Y + CARDBACK_Y_UNIT * i);
         new_cardback->setPixmap(QPixmap("./Dataset/CardBackL.jpg").scaled(CARDBACK_HEIGHT, CARDBACK_WIDTH));
         scene->addItem(new_cardback);
         cardBacks.push_back(new_cardback);
@@ -552,7 +662,6 @@ void Game::showDealCards(bool show)
 
     if (show)
     {
-        std::cout << "kkkkkkkk\n";
         for (int i = 0; i < selected_cards.size(); i++)
         {
             QGraphicsPixmapItem *new_card = new (QGraphicsPixmapItem);
@@ -563,43 +672,41 @@ void Game::showDealCards(bool show)
         }
     }
 }
-void Game::gameStart()
-{
-    // reset
-    last_type = None;
-    last_combination.clear();
-    selected_cards.clear();
-
-    // deliver card
-    shuffleAndDealCard();
-
-    int first_player;
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 13; j++)
-        {
-            if (players.at(i)->ownCards.at(j)->num == C3 && players.at(i)->ownCards.at(j)->suit == Clubs)
-            {
-                first_player = (4 + i - 1) % 4;
-                break;
-            }
-        }
-    }
-
-    player_turn(first_player);
-    nextPlayer();
-}
 
 void Game::Pass()
 {
+
     std::cout << "Pass\n";
+    // now player Pass
+    now_player->Pass = true;
+    Passtime++;
+    std::cout << "Pass:" << Passtime << "\n";
     selected_cards.clear();
+    if (Passtime == 3) // pass 3 次，下一個人任意出牌
+    {
+        Passtime = 0;
+        showDealCards(false); // clear show_card
+
+        last_type = None;
+        last_combination.clear();
+        selected_type = None;
+        selected_cards.clear();
+    }
     nextPlayer();
 }
 
 void Game::Deal()
 {
     last_combination = selected_cards;
+    Passtime = 0; // pass次數歸零
+    if (last_type == None)
+    {
+        for (Player *player : players)
+            player->Pass = false;
+    }
+    now_player->Pass = false;
+
+    std::cout << "Pass:" << Passtime << "\n";
     if (selected_cards.size() == 1)
     {
         last_type = Single;
@@ -623,12 +730,18 @@ void Game::Deal()
     showDealCards();
     selected_cards.clear();
     first_one_deal = false;
-    nextPlayer();
+
+    if (now_player->ownCards.size() == 0)
+        Finish();
+    else
+        nextPlayer();
 }
 
-void Game::nextPlayer()
+void Game::nextPlayer(int next)
 {
-    if (now_player == players.at(0))
+    if (next != -1)
+        player_turn(next);
+    else if (now_player == players.at(0))
         player_turn(1);
     else if (now_player == players.at(1))
         player_turn(2);
@@ -637,6 +750,8 @@ void Game::nextPlayer()
     else if (now_player == players.at(3))
         player_turn(0);
 
+    // pass reset
+    now_player->Pass = false;
     showNowPlayerOwnCards();
     showOtherPlayersOwnCard();
     showCombination();
@@ -713,8 +828,19 @@ void Game::nextPlayer()
     {
         // disable cards
     }
-}
+    // new player can't Pass
+    if (last_type == None)
+        btnPass->setDisabled(true);
+    else
+        btnPass->setDisabled(false);
 
+    // btn rst
+    btnSF->setStyleSheet("background:white");
+    btnFK->setStyleSheet("background:white");
+    btnFH->setStyleSheet("background:white");
+    btnS->setStyleSheet("background:white");
+    btnP->setStyleSheet("background:white");
+}
 void Game::switchCombinationalType(int new_selected_type)
 {
 
@@ -724,6 +850,12 @@ void Game::switchCombinationalType(int new_selected_type)
     // disable all cards
     for (QPushButton *btn : nowcardsBTNs)
         btn->setDisabled(true);
+    // btn reset
+    btnSF->setStyleSheet("background:white");
+    btnFK->setStyleSheet("background:white");
+    btnFH->setStyleSheet("background:white");
+    btnS->setStyleSheet("background:white");
+    btnP->setStyleSheet("background:white");
 
     // combinational type btn
 
@@ -746,26 +878,37 @@ void Game::switchCombinationalType(int new_selected_type)
         break;
     case (Straight_Flush):
         combination_types.at(0)->find_enable();
+        btnSF->setStyleSheet("background:red");
+
         // btnSF->setStyleSheet("border:5px;");//设置按钮背景颜色
         break;
     case (Four_of_a_Kind):
         combination_types.at(1)->find_enable();
         // btnFK->setStyleSheet("border:5px;");//设置按钮背景颜色
+        btnFK->setStyleSheet("background:red");
         break;
     case (Full_House):
         combination_types.at(2)->find_enable();
         // btnFH->setStyleSheet("border:5px;");//设置按钮背景颜色
+        btnFH->setStyleSheet("background:red");
         break;
     case (Straight):
         combination_types.at(3)->find_enable();
         // btnS->setStyleSheet("border:5px;");//设置按钮背景颜色
+        btnS->setStyleSheet("background:red");
         break;
     case (Pair):
         combination_types.at(4)->find_enable();
         // btnP->setStyleSheet("border:5px;");//设置按钮背景颜色
+        btnP->setStyleSheet("background:red");
 
         break;
     case (Single):
+        btnSF->setStyleSheet("background:white");
+        btnFK->setStyleSheet("background:white");
+        btnFH->setStyleSheet("background:white");
+        btnS->setStyleSheet("background:white");
+        btnP->setStyleSheet("background:white");
         break;
 
     default:
@@ -776,4 +919,241 @@ void Game::switchCombinationalType(int new_selected_type)
         if (now_player->ownCards.at(i)->enable == true || selected_type == None || selected_type == Single)
             nowcardsBTNs.at(i)->setDisabled(false);
     }
+}
+void Game::setPlayerText()
+{
+
+    while (!playerLabel.empty())
+    {
+        playerLabel.back()->deleteLater();
+        playerLabel.pop_back();
+    }
+
+    // set Player Name
+    QLabel *label1 = new QLabel("Player1", this);
+    QLabel *label2 = new QLabel("Player2", this);
+    QLabel *label3 = new QLabel("Player3", this);
+    QLabel *label4 = new QLabel("Player4", this);
+
+    if (now_player->player_num == 1)
+        label1->setGeometry(PLAYER1_X, PLAYER1_Y, LABEL_X, LABEL_Y);
+    else if (now_player->player_num == 2)
+        label2->setGeometry(PLAYER1_X, PLAYER1_Y, LABEL_X, LABEL_Y);
+    else if (now_player->player_num == 3)
+        label3->setGeometry(PLAYER1_X, PLAYER1_Y, LABEL_X, LABEL_Y);
+    else if (now_player->player_num == 4)
+        label4->setGeometry(PLAYER1_X, PLAYER1_Y, LABEL_X, LABEL_Y);
+
+    for (int i = 0; i < 3; i++)
+    {
+        int playerX;
+        int playerY;
+        if (i == 0)
+        {
+            playerX = PLAYER2_X;
+            playerY = PLAYER2_Y;
+        }
+        if (i == 1)
+        {
+            playerX = PLAYER3_X;
+            playerY = PLAYER3_Y;
+        }
+        if (i == 2)
+        {
+            playerX = PLAYER4_X;
+            playerY = PLAYER4_Y;
+        }
+
+        if (other_players.at(i)->player_num == 1)
+            label1->setGeometry(playerX, playerY, LABEL_X, LABEL_Y);
+        else if (other_players.at(i)->player_num == 2)
+            label2->setGeometry(playerX, playerY, LABEL_X, LABEL_Y);
+        else if (other_players.at(i)->player_num == 3)
+            label3->setGeometry(playerX, playerY, LABEL_X, LABEL_Y);
+        else if (other_players.at(i)->player_num == 4)
+            label4->setGeometry(playerX, playerY, LABEL_X, LABEL_Y);
+    }
+
+    label1->setFont(QFont("Courier", 15, QFont::Bold, true));
+    label2->setFont(QFont("Courier", 15, QFont::Bold, true));
+    label3->setFont(QFont("Courier", 15, QFont::Bold, true));
+    label4->setFont(QFont("Courier", 15, QFont::Bold, true));
+
+    label1->show();
+    label2->show();
+    label3->show();
+    label4->show();
+    playerLabel.push_back(label1);
+    playerLabel.push_back(label2);
+    playerLabel.push_back(label3);
+    playerLabel.push_back(label4);
+
+    // Set Player Rest Card
+    QLabel *labelN1 = new QLabel(QString::number(now_player->ownCards.size()), this);
+    QLabel *labelN2 = new QLabel(QString::number(other_players.at(0)->ownCards.size()), this);
+    QLabel *labelN3 = new QLabel(QString::number(other_players.at(1)->ownCards.size()), this);
+    QLabel *labelN4 = new QLabel(QString::number(other_players.at(2)->ownCards.size()), this);
+
+    labelN1->setGeometry(PLAYER1_X + 15, PLAYER1_Y + 40, LABEL_X, LABEL_Y);
+    labelN2->setGeometry(PLAYER2_X + 80, PLAYER2_Y, LABEL_X, LABEL_Y);
+    labelN3->setGeometry(PLAYER3_X + 80, PLAYER3_Y, LABEL_X, LABEL_Y);
+    labelN4->setGeometry(PLAYER4_X + 80, PLAYER4_Y, LABEL_X, LABEL_Y);
+
+    labelN1->setFont(QFont("Courier", 30));
+    labelN2->setFont(QFont("Courier", 30));
+    labelN3->setFont(QFont("Courier", 30));
+    labelN4->setFont(QFont("Courier", 30));
+
+    labelN1->show();
+    labelN2->show();
+    labelN3->show();
+    labelN4->show();
+    playerLabel.push_back(labelN1);
+    playerLabel.push_back(labelN2);
+    playerLabel.push_back(labelN3);
+    playerLabel.push_back(labelN4);
+
+    // show pass
+    for (int i = 0; i < 3; i++)
+    {
+        if (other_players.at(i)->Pass == true)
+        {
+            QLabel *labelPass = new QLabel("Pass!", this);
+            switch (i)
+            {
+            case 0:
+                labelPass->setGeometry(PLAYER2_X, PLAYER2_Y + 40, LABEL_X, LABEL_Y);
+                break;
+            case 1:
+                labelPass->setGeometry(PLAYER3_X, PLAYER3_Y + 40, LABEL_X, LABEL_Y);
+                break;
+            case 2:
+                labelPass->setGeometry(PLAYER4_X, PLAYER4_Y + 40, LABEL_X, LABEL_Y);
+                break;
+
+            default:
+                break;
+            }
+            labelPass->setFont(QFont("Courier", 20));
+            labelPass->show();
+            playerLabel.push_back(labelPass);
+        }
+    }
+}
+void Game::Finish()
+{
+    std::cout << "Finish\n";
+    int score = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        if (!players.at(i)->ownCards.empty())
+        {
+            if (players.at(i)->ownCards.back()->num == C2)
+                score += players.at(i)->ownCards.size() * 2;
+            else
+                score += players.at(i)->ownCards.size();
+        }
+    }
+    now_player->score = score;
+    std::cout << "score:" << score << "\n";
+    if (score > topScore)
+        topScore = score;
+    lastwin = now_player->player_num;
+    ShowMsg();
+    if (topScore < 50)
+        gameStart();
+    else
+    {
+        afterstart = false;
+        reset();
+    }
+}
+
+void Game::setInitialScene()
+{
+    QPushButton *P1 = new QPushButton();
+    P1->setParent(this);
+    P1->setText("1人");
+    P1->move(100, 100);
+    P1->resize(100, 100);
+    P1->setFont(QFont("Courier", 18, QFont::Bold));
+    P1->setDisabled(true);
+    initialBTNs.push_back(P1);
+
+    QPushButton *P2 = new QPushButton();
+    P2->setParent(this);
+    P2->setText("2人");
+    P2->move(220, 100);
+    P2->resize(100, 100);
+    P2->setFont(QFont("Courier", 18, QFont::Bold));
+    P2->setDisabled(true);
+    initialBTNs.push_back(P2);
+
+    QPushButton *P3 = new QPushButton();
+    P3->setParent(this);
+    P3->setText("3人");
+    P3->move(340, 100);
+    P3->resize(100, 100);
+    P3->setFont(QFont("Courier", 18, QFont::Bold));
+    P3->setDisabled(true);
+    initialBTNs.push_back(P3);
+
+    QPushButton *P4 = new QPushButton();
+    P4->setParent(this);
+    P4->setText("4人");
+    P4->move(460, 100);
+    P4->resize(100, 100);
+    P4->setFont(QFont("Courier", 18, QFont::Bold));
+    P4->setDisabled(false);
+    initialBTNs.push_back(P4);
+
+    QPushButton *PVC = new QPushButton();
+    PVC->setParent(this);
+    PVC->setText("電腦對戰");
+    PVC->move(100, 300);
+    PVC->resize(200, 100);
+    PVC->setFont(QFont("Courier", 18, QFont::Bold));
+    PVC->setDisabled(true);
+    initialBTNs.push_back(PVC);
+
+    QPushButton *PVP = new QPushButton();
+    PVP->setParent(this);
+    PVP->setText("玩家對戰");
+    PVP->move(340, 300);
+    PVP->resize(200, 100);
+    PVP->setFont(QFont("Courier", 18, QFont::Bold));
+    PVP->setDisabled(false);
+    initialBTNs.push_back(PVP);
+
+    QPushButton *Start = new QPushButton();
+    Start->setParent(this);
+    Start->setText("Start");
+    Start->move(100, 500);
+    Start->resize(200, 100);
+    Start->setFont(QFont("Courier", 18, QFont::Bold));
+    Start->setDisabled(false);
+    initialBTNs.push_back(Start);
+    QObject::connect(Start, SIGNAL(clicked()), this, SLOT(startbtn()));
+
+    QPushButton *Exit = new QPushButton();
+    Exit->setParent(this);
+    Exit->setText("Exit");
+    Exit->move(340, 500);
+    Exit->resize(200, 100);
+    Exit->setFont(QFont("Courier", 18, QFont::Bold));
+    Exit->setDisabled(false);
+    initialBTNs.push_back(Exit);
+    for (QPushButton *btn : initialBTNs)
+        btn->show();
+}
+void Game::startbtn()
+{
+    afterstart = true;
+    while (!initialBTNs.empty())
+    {
+        initialBTNs.back()->deleteLater();
+        initialBTNs.pop_back();
+    }
+
+    reset();
 }

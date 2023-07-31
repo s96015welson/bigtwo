@@ -57,7 +57,7 @@ bool pair2::compare_combination(std::vector<Card *> newC, std::vector<Card *> ol
 {
     if (newC.at(1)->num > oldC.at(1)->num)
         return true;
-    else if (newC.at(1)->num == oldC.at(1)->num && newC.at(1)->suit == oldC.at(1)->suit)
+    else if (newC.at(1)->num == oldC.at(1)->num && newC.at(1)->suit > oldC.at(1)->suit)
         return true;
     else
         return false;

@@ -36,13 +36,28 @@
 #define CARDBACK_LEFT_Y 100
 
 #define CARDBACK_RIGHT_X 923
-#define CARDBACK_RIGHT_Y 600
+#define CARDBACK_RIGHT_Y 500
 
-#define CARDBACK_UP_X_LEFT 300
+#define CARDBACK_UP_X_RIGHT 700
 #define CARDBACK_UP_Y 50
 
 #define CARDBACK_Y_UNIT 30
 #define CARDBACK_X_UNIT 35
+
+
+
+#define PLAYER1_X 100
+#define PLAYER1_Y 650
+#define PLAYER2_X 923
+#define PLAYER2_Y 570
+#define PLAYER3_X 800
+#define PLAYER3_Y 5
+#define PLAYER4_X 75
+#define PLAYER4_Y 5
+#define LABEL_X 100
+#define LABEL_Y 60
+
+
 // Card
 enum ITEM_ORDER
 {
@@ -65,8 +80,8 @@ enum Suit
 enum Number
 {
     // buttom
-    C3,
-    C4,
+    C3,//0
+    C4,//1
     C5,
     C6,
     C7,
@@ -77,7 +92,7 @@ enum Number
     Q,
     K,
     A,
-    C2
+    C2//12
     // top
 };
 
