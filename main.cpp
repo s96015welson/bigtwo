@@ -4,10 +4,10 @@
 Game *game;
 
 int main(int argc, char *argv[]){
-    QApplication app(argc, argv);
+    QApplication *app =new QApplication(argc, argv);
 
-    game = new Game();
+    game = new Game(app);
     game->show();
 
-    return app.exec();
+    return app->exec();
 }

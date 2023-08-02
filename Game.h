@@ -17,7 +17,8 @@ class Game : public QGraphicsView
 {
     Q_OBJECT
 public:
-    Game(QWidget *parent = 0);
+    Game(QApplication* ,QWidget *parent = 0);
+    QApplication* app=nullptr;
 
     // objects of queue
     QGraphicsScene *scene = nullptr;
@@ -38,6 +39,7 @@ public slots:
     void Deal();
     void switchCombinationalType(int);
     void startbtn();
+    void quitapp();
 
 protected:
 private:
@@ -52,18 +54,18 @@ private:
     void player_turn(int);
     void gameStart();
     void showCombination();
-    void nextPlayer(int next=-1);
+    void nextPlayer(int next = -1);
     void setPlayerText();
     void Finish();
     void setInitialScene();
 
-    QPushButton *btnSF;   // 同花順
-    QPushButton *btnFK;   // 鐵支
-    QPushButton *btnFH;   // 葫蘆
-    QPushButton *btnS;    // 順子
-    QPushButton *btnP;    // 一對
-    QPushButton *btnPass; // Pass
-    QPushButton *btnDeal; // 出牌
+    QPushButton *btnSF = nullptr;   // 同花順
+    QPushButton *btnFK = nullptr;   // 鐵支
+    QPushButton *btnFH = nullptr;   // 葫蘆
+    QPushButton *btnS = nullptr;    // 順子
+    QPushButton *btnP = nullptr;    // 一對
+    QPushButton *btnPass = nullptr; // Pass
+    QPushButton *btnDeal = nullptr; // 出牌
 
     //
     Player *now_player;                              // 現在玩家
@@ -73,6 +75,7 @@ private:
     std::vector<Combination *> combination_types;    // 出牌組合
     std::vector<QGraphicsPixmapItem *> hasDealCards; // 上次出的牌
     std::vector<QLabel *> playerLabel;               // 玩家號碼label
+    std::vector<QLabel *> initialLabel;
 
     //
     std::vector<Card *> last_combination; // 上位玩家出的牌
@@ -81,19 +84,16 @@ private:
     CombinationType selected_type;        // 目前選中牌型
     bool first_one_deal = true;
 
-
     // int time
     int timerID;
     int Passtime = 0; // pass次數
     int Gametimes = 0;
-    int topScore=0;
-    int lastwin=0;
+    int topScore = 0;
+    int lastwin = 0;
 
     //
-    std::vector<QPushButton *>  initialBTNs;
-    int afterstart= false;
-
-    
+    std::vector<QPushButton *> initialBTNs;
+    int afterstart = false;
 };
 
 #endif // GAME_H

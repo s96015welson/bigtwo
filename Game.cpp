@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <stdlib.h>
 
 #include <QTimer>
 #include <QGraphicsTextItem>
@@ -16,6 +17,7 @@
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsProxyWidget>
+#include <QApplication>
 #include <ctime>
 #include <cstdlib>
 #include "unistd.h"
@@ -28,10 +30,10 @@
 #include "pair2.h"
 
 using namespace std;
-Game::Game(QWidget *parent)
+Game::Game(QApplication *appin, QWidget *parent)
 
 {
-
+    app = appin;
     setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     setMouseTracking(true);
     srand(time(NULL));
@@ -59,6 +61,13 @@ void Game::createScene()
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    //
+    QGraphicsPixmapItem *BG = new (QGraphicsPixmapItem);
+    BG->setPixmap(QPixmap("./Dataset/BG3.jpg").scaled(SCREEN_WIDTH, SCREEN_HEIGHT));
+
+    scene->addItem(BG);
+    BG->setPos(0, 0);
 }
 
 void Game::ShowMsg()
@@ -72,7 +81,7 @@ void Game::ShowMsg()
                          "font-size:25px;"
                          "}");
 
-    QString qStr = "第" + QString::number(Gametimes) + "次遊戲結束!\n";
+    QString qStr = "第" + QString::number(Gametimes) + "次遊戲結束!\n\n";
     qStr += "Player1 Score:" + QString::number(players.at(0)->score) + "\n";
     qStr += "Player2 Score:" + QString::number(players.at(1)->score) + "\n";
     qStr += "Player3 Score:" + QString::number(players.at(2)->score) + "\n";
@@ -104,7 +113,7 @@ void Game::initial()
 
 void Game::reset()
 {
-    first_one_deal = false;
+    first_one_deal = true;
     Gametimes = 1;
     topScore = 0;
     lastwin = 0;
@@ -142,7 +151,6 @@ void Game::reset()
         playerLabel.pop_back();
     }
 
-    /*
     if (btnSF != nullptr)
     {
         QPushButton *dbtn;
@@ -175,7 +183,6 @@ void Game::reset()
         btnDeal = nullptr;
         dbtn->deleteLater();
     }
-    */
 
     // initial button
     if (afterstart == false)
@@ -203,10 +210,11 @@ void Game::gameStart()
     last_combination.clear();
     selected_type = None;
     selected_cards.clear();
-    Passtime = 0;
+
     for (Player *player : players)
     {
         player->ownCards.clear();
+        player->Pass = false;
     }
     // clear show on scene items
     while (!nowcardsBTNs.empty())
@@ -230,7 +238,7 @@ void Game::gameStart()
     // deliver card
     shuffleAndDealCard();
 
-    int first_player;
+    int first_player = 0;
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 13; j++)
@@ -351,7 +359,8 @@ void Game::shuffleAndDealCard()
     {
         for (int j = 0; j < players.size(); j++)
         {
-            int r = rand() % cards.size();
+            //int r = rand() % cards.size();
+            int r = 0;
             players.at(j)->addCard(cards.at(r));
             cards.erase(cards.begin() + r);
         }
@@ -394,7 +403,7 @@ void Game::cardButtonEvent(int i)
     if (selected_type == Straight_Flush) // 桐花順
     {
         now_select_combination = combination_types.at(0);
-        if (selected_type != last_type && last_type != Four_of_a_Kind)
+        if (selected_type != last_type /*&& last_type != Four_of_a_Kind*/)
         {
             if (now_select_combination->is_this_combination(selected_cards))
                 btnDeal->setDisabled(false);
@@ -442,7 +451,7 @@ void Game::cardButtonEvent(int i)
         else if (((selected_cards.at(0)->num > last_combination.at(0)->num) || (selected_cards.at(0)->num == last_combination.at(0)->num && selected_cards.at(0)->suit > last_combination.at(0)->suit)))
             btnDeal->setDisabled(false);
     }
-
+    // 處理第一輪梅花三
     if (first_one_deal == true)
     {
         bool has3 = false;
@@ -462,10 +471,10 @@ void Game::player_turn(int newP)
     other_players.clear();
     switch (newP)
     {
-    case 0:
-        other_players.push_back(players.at(1));
-        other_players.push_back(players.at(2));
-        other_players.push_back(players.at(3));
+    case 0:                                     // player1
+        other_players.push_back(players.at(1)); // player2
+        other_players.push_back(players.at(2)); // player3
+        other_players.push_back(players.at(3)); // player4
         break;
     case 1:
         other_players.push_back(players.at(2));
@@ -665,8 +674,8 @@ void Game::showDealCards(bool show)
         for (int i = 0; i < selected_cards.size(); i++)
         {
             QGraphicsPixmapItem *new_card = new (QGraphicsPixmapItem);
-            new_card->setPos(400 + 25 * i, 400);
-            new_card->setPixmap(QPixmap(selected_cards.at(i)->cardPath).scaled(CARDBACK_WIDTH, CARDBACK_HEIGHT));
+            new_card->setPos(400 + 60 * i, 270);
+            new_card->setPixmap(QPixmap(selected_cards.at(i)->cardPath).scaled(CARDBACK_WIDTH * 1.5, CARDBACK_HEIGHT * 1.5));
             scene->addItem(new_card);
             hasDealCards.push_back(new_card);
         }
@@ -679,12 +688,11 @@ void Game::Pass()
     std::cout << "Pass\n";
     // now player Pass
     now_player->Pass = true;
-    Passtime++;
-    std::cout << "Pass:" << Passtime << "\n";
     selected_cards.clear();
-    if (Passtime == 3) // pass 3 次，下一個人任意出牌
+
+    if (other_players.at(2)->Pass == true && other_players.at(1)->Pass == true) // 3人  pass，下一個人任意出牌
     {
-        Passtime = 0;
+        std::cout << "All Pass\n";
         showDealCards(false); // clear show_card
 
         last_type = None;
@@ -698,7 +706,7 @@ void Game::Pass()
 void Game::Deal()
 {
     last_combination = selected_cards;
-    Passtime = 0; // pass次數歸零
+
     if (last_type == None)
     {
         for (Player *player : players)
@@ -706,7 +714,6 @@ void Game::Deal()
     }
     now_player->Pass = false;
 
-    std::cout << "Pass:" << Passtime << "\n";
     if (selected_cards.size() == 1)
     {
         last_type = Single;
@@ -736,7 +743,6 @@ void Game::Deal()
     else
         nextPlayer();
 }
-
 void Game::nextPlayer(int next)
 {
     if (next != -1)
@@ -751,7 +757,6 @@ void Game::nextPlayer(int next)
         player_turn(0);
 
     // pass reset
-    now_player->Pass = false;
     showNowPlayerOwnCards();
     showOtherPlayersOwnCard();
     showCombination();
@@ -765,6 +770,8 @@ void Game::nextPlayer(int next)
     btnS->setDisabled(true);    // 順子
     btnP->setDisabled(true);    // 一對
     btnDeal->setDisabled(true); // 出牌
+    for (QPushButton *btn : nowcardsBTNs)
+        btn->setDisabled(false);
 
     switch (last_type)
     {
@@ -785,6 +792,8 @@ void Game::nextPlayer(int next)
             btnSF->setDisabled(false); // 同花順
         break;
     case (Four_of_a_Kind):
+        if (combination_types.at(0)->has_this_kind())
+            btnSF->setDisabled(false); // 同花順
         if (combination_types.at(1)->has_this_kind())
             btnFK->setDisabled(false); // 鐵支
         break;
@@ -840,6 +849,21 @@ void Game::nextPlayer(int next)
     btnFH->setStyleSheet("background:white");
     btnS->setStyleSheet("background:white");
     btnP->setStyleSheet("background:white");
+
+    // 處理Pass玩家
+    if (now_player->Pass == true)
+    {
+        // disable 除了 pass以外的按鈕
+        btnDeal->setDisabled(true);
+        btnSF->setDisabled(true);
+        btnFK->setDisabled(true);
+        btnFH->setDisabled(true);
+        btnS->setDisabled(true);
+        btnP->setDisabled(true);
+        for (QPushButton *btn : nowcardsBTNs)
+            btn->setDisabled(true);
+        btnPass->setDisabled(false);
+    }
 }
 void Game::switchCombinationalType(int new_selected_type)
 {
@@ -1039,11 +1063,19 @@ void Game::setPlayerText()
             playerLabel.push_back(labelPass);
         }
     }
+    if (now_player->Pass == true)
+    {
+        QLabel *labelPass = new QLabel("Pass!", this);
+        labelPass->setGeometry(PLAYER1_X, PLAYER1_Y + 90, LABEL_X, LABEL_Y);
+        labelPass->setFont(QFont("Courier", 20));
+        labelPass->show();
+        playerLabel.push_back(labelPass);
+    }
 }
 void Game::Finish()
 {
     std::cout << "Finish\n";
-    int score = 0;
+    int score = now_player->score;
     for (int i = 0; i < 4; i++)
     {
         if (!players.at(i)->ownCards.empty())
@@ -1068,7 +1100,6 @@ void Game::Finish()
         reset();
     }
 }
-
 void Game::setInitialScene()
 {
     QPushButton *P1 = new QPushButton();
@@ -1105,6 +1136,7 @@ void Game::setInitialScene()
     P4->resize(100, 100);
     P4->setFont(QFont("Courier", 18, QFont::Bold));
     P4->setDisabled(false);
+    P4->setStyleSheet("background:red");
     initialBTNs.push_back(P4);
 
     QPushButton *PVC = new QPushButton();
@@ -1123,6 +1155,7 @@ void Game::setInitialScene()
     PVP->resize(200, 100);
     PVP->setFont(QFont("Courier", 18, QFont::Bold));
     PVP->setDisabled(false);
+    PVP->setStyleSheet("background:red");
     initialBTNs.push_back(PVP);
 
     QPushButton *Start = new QPushButton();
@@ -1143,8 +1176,21 @@ void Game::setInitialScene()
     Exit->setFont(QFont("Courier", 18, QFont::Bold));
     Exit->setDisabled(false);
     initialBTNs.push_back(Exit);
+    QObject::connect(Exit, SIGNAL(clicked()), this, SLOT(quitapp()));
+
     for (QPushButton *btn : initialBTNs)
         btn->show();
+
+    QLabel *label1 = new QLabel("人數:", this);
+    QLabel *label2 = new QLabel("模式:", this);
+    label1->setGeometry(100, 40, LABEL_X, LABEL_Y);
+    label2->setGeometry(100, 240, LABEL_X, LABEL_Y);
+    label1->setFont(QFont("Courier", 18, QFont::Bold, true));
+    label2->setFont(QFont("Courier", 18, QFont::Bold, true));
+    label1->show();
+    label2->show();
+    initialLabel.push_back(label1);
+    initialLabel.push_back(label2);
 }
 void Game::startbtn()
 {
@@ -1154,6 +1200,15 @@ void Game::startbtn()
         initialBTNs.back()->deleteLater();
         initialBTNs.pop_back();
     }
+    while (!initialLabel.empty())
+    {
+        initialLabel.back()->deleteLater();
+        initialLabel.pop_back();
+    }
 
     reset();
+}
+void Game::quitapp()
+{
+    app->quit();
 }
